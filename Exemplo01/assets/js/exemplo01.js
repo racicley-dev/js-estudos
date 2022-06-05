@@ -18,7 +18,7 @@ window.onload = ()=>{
         if(numero[0].innerHTML < 0){
             numero[0].style.color = 'red';
         }else{
-            numero[0].style.color = 'burlywood';
+            numero[0].style.color = 'burlywood'; 
         }
     }
 }
