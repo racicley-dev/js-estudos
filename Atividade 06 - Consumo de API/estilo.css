@@ -11,3 +11,14 @@
     height: 15px;
     display: inline;
 }
+
+div {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+button {
+    width: 100px;
+    height: 50px;
+    color: red;
+}
