@@ -46,7 +46,8 @@ const loadImg = async() =>{
     sim = ar[1];
 
     //console.log(sim.data);
-    var custo_final = obj.mana_cost;
+    let custo_final = obj.mana_cost;
+    let efeito_final = obj.oracle_text;
     for(let item of sim.data){
         if(custo_final.indexOf(item['symbol']) !== -1){
             //console.log(item['svg_uri']);
@@ -56,13 +57,20 @@ const loadImg = async() =>{
             custo_final = custo_final.replaceAll(item['symbol'], nome_img);
             console.log(custo_final);
         }
+
+        if(efeito_final.indexOf(item['symbol']) !== -1){
+            
+            let nome_efeito = '<img src=\"'+item['svg_uri']+'\" id=\"custo_c\">';
+        
+            efeito_final = efeito_final.replaceAll(item['symbol'], nome_efeito);
+        }
     }
     //console.log(custo_final);
 
     img.src = obj.image_uris.large;
     nome.innerHTML ="Nome da carta: "+ obj.name;
     custo_mana.innerHTML ="Custo de mana: "+ custo_final;
-    efeito.innerHTML ='Efeito da Carta: '+ obj.oracle_text;
+    efeito.innerHTML ='Efeito da Carta: '+ efeito_final;
     tipo.innerHTML = 'Tipo da carta: '+ obj.type_line;
 
     //console.log(obj);
