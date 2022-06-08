@@ -11,28 +11,23 @@ let efeito = document.getElementById('efeito');
 let tipo = document.getElementById('tipo');
 let cores = document.getElementById('cores');
 
-var carta = {
-    nome:'',
-    img:'',
-    cmc:'',
-    cor:'',
-    custo_mana:'',
-    raridade: ''
-}
-
 const pegaCarta = async () => {
     
     try{
+        let arr = [];
+        
         const data = await fetch(BASE_URL);
+        const simbolos = await fetch('https://api.scryfall.com/symbology');
+        
+        
         const json = await data.json();
-
-        //const [name, image_uris, cmc, colors, mana_cost, rarity] = json;
-
-        //carta.nome = json.name;
-        //carta.img = json.image_uris.large;
+        const simjson = await simbolos.json();
 
 
-        return json;
+        arr.push(json);
+        arr.push(simjson);
+
+        return arr;
     }catch(e){
         console.log(e);
     }
@@ -40,19 +35,43 @@ const pegaCarta = async () => {
 
 
 const loadImg = async() =>{
-    let obj = {}
-    obj = await pegaCarta();
+    let ar = []
     
-    img.src = obj.image_uris.large;
-    nome.innerHTML = obj.name;
-    custo_mana.innerHTML = obj.mana_cost;
-    efeito.innerHTML = obj.oracle_text;
-    tipo.innerHTML = obj.type_line;
+    let obj = {}
+    let sim = {}
+    
+    ar = await pegaCarta();
+    
+    obj = ar[0];
+    sim = ar[1];
 
-    console.log(obj);
+    //console.log(sim.data);
+    var custo_final = obj.mana_cost;
+    for(let item of sim.data){
+        if(custo_final.indexOf(item['symbol']) !== -1){
+            //console.log(item['svg_uri']);
+            //console.log(item['symbol']);
+            let nome_img = '<img src=\"'+item['svg_uri']+'\" id=\"custo_c\">';
+        
+            custo_final = custo_final.replaceAll(item['symbol'], nome_img);
+            console.log(custo_final);
+        }
+    }
+    //console.log(custo_final);
+
+    img.src = obj.image_uris.large;
+    nome.innerHTML ="Nome da carta: "+ obj.name;
+    custo_mana.innerHTML ="Custo de mana: "+ custo_final;
+    efeito.innerHTML ='Efeito da Carta: '+ obj.oracle_text;
+    tipo.innerHTML = 'Tipo da carta: '+ obj.type_line;
+
+    //console.log(obj);
 }
 
 btn[0].addEventListener('click', loadImg);
+
+
+
 
 ///Uma forma de consumir a API Scryfall
 /*
